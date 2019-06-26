@@ -6,21 +6,25 @@
       </header>
 
       <main class="main">
-        <form class="register">
+        <form class="register" @submit.prevent="addTodo">
           <div class="register__input">
             <p class="register__input__title">やることのタイトル</p>
             <input
+              v-model="targetTodo.title"
               type="text"
               name="title"
               placeholder="ここにTODOのタイトルを記入してください"
+              required
             >
           </div>
           <div class="register__input">
             <p class="register__input__title">やることの内容</p>
             <textarea
+              v-model="targetTodo.detail"
               name="detail"
               rows="3"
               placeholder="ここにTODOの内容を記入してください。改行は半角スペースに変換されます。"
+              required
             />
           </div>
           <div class="register__submit">
@@ -31,7 +35,7 @@
         </form>
 
         <div v-if="errorMessage" class="error">
-          <p class="errror__text">{{ errorMessage }}</p>
+          <p class="error__text">{{ errorMessage }}</p>
         </div>
 
         <div class="todos">
@@ -77,6 +81,12 @@ export default {
   data() {
     return {
       todos: [],
+      targetTodo: {
+        id: null,
+        title: '',
+        detail: '',
+        completed: false,
+      },
       errorMessage: '',
     };
   },
@@ -90,6 +100,26 @@ export default {
         this.errorMessage = 'ネットに接続されていない、もしくはサーバーとの接続がされていません。ご確認ください。';
       }
     });
+  },
+  methods: {
+    addTodo() {
+      const postTodo = Object.assign({}, {
+        title: this.targetTodo.title,
+        detail: this.targetTodo.detail,
+      });
+      axios.post('http://localhost:3000/api/todos/',  postTodo).then(({ data }) => {
+        this.todos.unshift(data);
+        this.targetTodo = Object.assign({}, this.targetTodo, { title: '', detil: ''});
+        this.errorMessage = '';
+      }).catch((err) => {
+        if (err.response) {
+          this.errorMessage = err.response.data.message;
+        } else {
+          this.errorMessage = 'ネットに接続がされていない、もしくはサーバーとの接続がされていません。ご確認ください。';
+        }
+        console.log(err.response);
+      });
+    },
   },
 };
 </script>
