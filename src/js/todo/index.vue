@@ -41,10 +41,25 @@
         <div class="todos">
           <template v-if="todos.length">
             <ul class="todos__list">
-              <li v-for="todo in todos" :key="todo.id">
+              <li
+                v-for="todo in todos"
+                :key="todo.id"
+                :class="todo.completed ? 'is-completed' : ''"
+              >
                 <div class="todos__inner">
                   <div class="todos__completed">
-                    <button class="todos__completed__btn" type="button">未完了</button>
+                    <button
+                      class="todos__completed__btn"
+                      type="button"
+                      @click="changeCompleted(todo)"
+                    >
+                      <template v-if="todo.completed">
+                        <span>完了</span>
+                      </template>
+                      <template v-else>
+                        <span>未完了</span>
+                      </template>
+                    </button>
                   </div>
                   <div class="todos__desc">
                     <h2 class="todos__desc__title">{{ todo.title }}</h2>
@@ -66,9 +81,9 @@
       </main>
 
       <footer class="footer">
-        <p>全項目数: 0</p>
-        <p>完了済: 0</p>
-        <p>未完了: 0</p>
+        <p>全項目数: {{ todos.length }}</p>
+        <p>完了済: {{ todos.filter(todo => todo.completed).length }}</p>
+        <p>未完了: {{ todos.filter(todo => !todo.completed).length }}</p>
       </footer>
     </div>
   </div>
@@ -118,6 +133,23 @@ export default {
           this.errorMessage = 'ネットに接続がされていない、もしくはサーバーとの接続がされていません。ご確認ください。';
         }
         console.log(err.response);
+      });
+    },
+    changeCompleted(todo) {
+      const targetTodo = Object.assign({}, todo);
+      axios.patch(`http://localhost:3000/api/todos/${targetTodo.id}`, {
+        completed: !targetTodo.completed,
+      }).then(({ data }) => {
+        this.todos = this.todos.map((todoItem) => {
+          if (todoItem.id === targetTodo.id) return data;
+          return todoItem;
+        });
+      }).catch((err) => {
+        if (err.response) {
+          this.errorMessage = err.response.data.message;
+        } else {
+          this.errorMessage = 'ネットに接続がされていない、もしくはサーバーとの接続がされていません。ご確認ください。';
+        }
       });
     },
   },
