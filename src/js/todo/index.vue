@@ -67,7 +67,13 @@
                   </div>
                   <div class="todos__btn">
                     <button class="todos__btn__edit" type="button">編集</button>
-                    <button class="todos__btn__delete" type="button">削除</button>
+                    <button 
+                      class="todos__btn__delete"
+                      type="button"
+                      @click="deleteTodo(todo.id)"
+                    >
+                      削除
+                    </button>
                   </div>
                 </div>
               </li>
@@ -151,6 +157,19 @@ export default {
           this.errorMessage = 'ネットに接続がされていない、もしくはサーバーとの接続がされていません。ご確認ください。';
         }
       });
+    },
+    deleteTodo(id) {
+      axios.delete(`http://localhost:3000/api/todos/${id}`).then(({ data }) => {
+        this.todos = data.todos.reverse();
+        this.errorMessage = '';
+      }).catch((err) => {
+        if (err.response) {
+          this.errorMessage = err.response.data.message;
+        } else {
+          this.errorMessage = 'ネットに接続がされていない、もしくはサーバーとの接続がされていません。ご確認ください。';
+        }
+      });
+      console.log(id);
     },
   },
 };
