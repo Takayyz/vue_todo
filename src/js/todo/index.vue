@@ -207,6 +207,7 @@ export default {
       });
     },
     deleteTodo(id) {
+      console.log(id);
       this.targetTodo = this.initTargetTodo();
       axios.delete(`http://localhost:3000/api/todos/${id}`).then(({ data }) => {
         this.todos = data.todos.reverse();
