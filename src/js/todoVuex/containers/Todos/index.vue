@@ -1,8 +1,9 @@
 <template lang="html">
   <app-wrapper>
-    <app-register v-if="todoFilter !== 'completedTodos'" />
     <app-navi />
-    <app-error-message />
+    <app-register v-if="todoFilter !== 'completedTodos'" />
+    <!-- <template v-if="" -->
+    <app-error-message v-if="errorMessage" />
     <template v-slot:todos>
       <app-list v-if="todos.length" :todos="todos" />
       <app-empty-message />

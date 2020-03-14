@@ -15,7 +15,7 @@ const store = new Vuex.Store({
       detail: '',
       completed: '',
     },
-    errorMessage: 'エラーが起きました。',
+    errorMessage: '',
     emptyMessage: 'やることリストは空です。',
   },
   getters: {
