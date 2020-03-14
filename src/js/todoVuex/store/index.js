@@ -145,11 +145,11 @@ const store = new Vuex.Store({
     },
     deleteTodo({ commit }, todoId) {
       axios.delete(`http://localhost:3000/api/todos/${todoId}`).then(({ data }) => {
-        // 処理
+        commit('getTodos', data.todos);
       }).catch((err) => {
-        // 処理
+        commit('showError', err.response);
       });
-      // 必要があれば処理
+      commit('initTargetTodo');
     },
   },
 });
