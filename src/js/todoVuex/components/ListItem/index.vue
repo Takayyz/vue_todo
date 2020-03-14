@@ -48,10 +48,10 @@ export default {
     },
   },
   methods: {
-    changeCompleted: (todo) => {
+    changeCompleted: function (todo) {
       this.$store.dispatch('changeCompleted', todo);
     },
-    showEditor: (todo) => {
+    showEditor: function (todo) {
       this.$store.dispatch('showEditor', todo);
     },
   },
