@@ -6,7 +6,7 @@
     <app-error-message v-if="errorMessage" />
     <template v-slot:todos>
       <app-list v-if="todos.length" :todos="todos" />
-      <app-empty-message />
+      <app-empty-message v-else/>
     </template>
   </app-wrapper>
 </template>
