@@ -14,7 +14,6 @@ export default {
 <style lang="scss" scoped>
 .todo__link {
   display: flex;
-  margin-top: 10px;
   &__item {
     padding: 10px 0;
     width: 100%;
